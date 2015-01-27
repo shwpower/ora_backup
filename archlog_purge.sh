@@ -39,6 +39,7 @@ function print_msg
 
 function check_instance
 {
+        ##### Function toe check whether instance is running ####
         if [ $# -eq 1 ]; then
                 if [[ -z $(ps -ef|grep ora_smon_$1|grep -v grep) ]]; then
                         print_msg "Instance $1 is not running. Exit.."
@@ -55,8 +56,9 @@ function check_instance
         return 0
 }
 
-function log_rotate {
-        ## MAX LOG SIZE = 10MB
+function log_rotate 
+{
+        #### Function to trunc the log file (MAX LOG SIZE = 10MB) ####
         MAX_LOG_SIZE=10240000 
         if [ -f $1 ]; then
                 LOG_SIZE=$(ls -l $1 |awk '{print $5}')
@@ -105,6 +107,7 @@ fi
 
 check_instance $SID || exit 1
 
+## Get the variables for ORACLE DB environment
 export ORACLE_SID=$SID
 export ORACLE_HOME=$(/usr/local/bin/dbhome $SID)
 
@@ -115,6 +118,7 @@ echo "exit" >> $SQLFILE
 
 $ORACLE_HOME/bin/sqlplus '/ as sysdba' < $SQLFILE >$TMPFILE
 
+## Get the archive log path
 ARC_PATH=$(cat $TMPFILE|grep "Archive destination"|sed 's/Archive destination//g'|sed 's/ *//g')
 print_msg "Get the archive log dest - $ARC_PATH"
         
