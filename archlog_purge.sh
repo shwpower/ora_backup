@@ -75,7 +75,7 @@ function log_rotate
 
 ## Program PATH, Program Name
 PP=$(dirname $0)
-PN=$(basename "$0" ".ksh")
+PN=$(basename "$0" ".sh")
 
 LOGDIR="$HOME/logs"
 [ -d $LOGDIR ] || LOGDIR=/tmp
